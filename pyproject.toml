@@ -23,7 +23,7 @@ Wappalyzer = "^1.0"
 pytest = "^8.0"
 ruff = "^0.4"
 pytest-asyncio = "^0.23"
-pytest-httpx = "^0.29"
+pytest-httpx = "^0.35"
 
 [tool.ruff]
 line-length = 88

@@ -1,5 +1,6 @@
 from typer.testing import CliRunner
 from luna.cli.main import app
+import os
 
 runner = CliRunner()
 
@@ -9,7 +10,10 @@ def test_init():
     assert result.exit_code == 0
     assert "Initialized Luna" in result.stdout
 
-def test_hunt(monkeypatch):
+def test_hunt(monkeypatch, tmp_path):
+    targets = tmp_path / "targets.txt"
+    targets.write_text("example.com\n")
+    monkeypatch.chdir(tmp_path)
     monkeypatch.setattr("luna.recon.enum_subdomains", lambda d: [])
     monkeypatch.setattr("luna.recon.port_scan", lambda t: [])
 
@@ -27,6 +31,15 @@ def test_report():
     result = runner.invoke(app, ["report", "--output", "test.md"])
     assert result.exit_code == 0
     assert "Report saved" in result.stdout
+
+
+def test_hunt_out_of_scope(tmp_path):
+    (tmp_path / "targets.txt").write_text("allowed.com\n")
+    runner = CliRunner()
+    os.chdir(tmp_path)
+    result = runner.invoke(app, ["hunt", "example.com"], env={"PYTHONUNBUFFERED": "1"})
+    assert result.exit_code == 1
+    assert "not in" in result.stdout
 
 
 def test_fuzz(tmp_path):

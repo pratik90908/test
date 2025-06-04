@@ -7,6 +7,7 @@ from pathlib import Path
 from luna import recon, scanner, fuzzer, exploits
 from luna.db import init_db
 from luna.reporting import save_report
+from luna.utils import load_targets
 
 app = typer.Typer(help="Luna Offensive Security Automation Framework")
 
@@ -18,8 +19,17 @@ def init(db_url: str = typer.Option(None, help="PostgreSQL connection URL")):
     typer.echo(f"Initialized Luna environment with DB {url}")
 
 @app.command()
-def hunt(target: str, depth: int = 1, threads: int = 10):
+def hunt(
+    target: str,
+    depth: int = 1,
+    threads: int = 10,
+    targets_file: Path = typer.Option(Path("targets.txt"), help="Scope file"),
+):
     """Run full hunt against a target."""
+    allowed = load_targets(targets_file)
+    if not allowed or target not in allowed:
+        typer.echo(f"{target} not in {targets_file}", err=True)
+        raise typer.Exit(1)
     typer.echo(f"Starting hunt on {target} depth={depth} threads={threads}")
     try:
         subs = recon.enum_subdomains(target)
