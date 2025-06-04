@@ -4,7 +4,7 @@ import shutil
 import subprocess
 from typing import List, Set
 
-from Wappalyzer import Wappalyzer, WebPage
+from wappalyzer import analyze
 
 
 def enum_subdomains(domain: str) -> List[str]:
@@ -43,6 +43,5 @@ def port_scan(target: str) -> List[int]:
 
 def tech_fingerprint(url: str) -> Set[str]:
     """Identify technologies used by a target URL."""
-    wappalyzer = Wappalyzer.latest()
-    webpage = WebPage.new_from_url(url)
-    return set(wappalyzer.analyze(webpage))
+    result = analyze(url)
+    return set(result.get(url, {}).keys())
