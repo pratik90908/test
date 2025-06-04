@@ -12,10 +12,12 @@ luna = "luna.__main__:app"
 [tool.poetry.dependencies]
 python = "^3.11"
 typer = {extras = ["all"], version = "^0.12"}
+click = "<8.1"
 sqlmodel = "^0.0.16"
 httpx = "^0.28"
 aiofiles = "^23.2"
 anyio = "^4.3"
+Wappalyzer = "^1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
