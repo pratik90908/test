@@ -4,7 +4,7 @@ import typer
 
 from pathlib import Path
 
-from luna import recon, scanner
+from luna import recon, scanner, fuzzer
 from luna.db import init_db
 from luna.reporting import save_report
 
@@ -39,6 +39,22 @@ def hunt(target: str, depth: int = 1, threads: int = 10):
 
     results = asyncio.run(scanner.fetch_cves(target))
     typer.echo(f"Fetched {len(results)} CVEs for {target}")
+
+
+@app.command()
+def fuzz(url: str, wordlist: Path = typer.Option(Path("params.txt"))):
+    """Bruteforce parameter names on a URL."""
+    if not wordlist.exists():
+        typer.echo(f"Wordlist {wordlist} not found")
+        raise typer.Exit(1)
+    words = [line.strip() for line in wordlist.read_text().splitlines() if line.strip()]
+    typer.echo(f"Fuzzing {url} with {len(words)} parameters")
+    results = asyncio.run(fuzzer.param_bruteforce(url, words))
+    waf = fuzzer.detect_waf(list(results.values()))
+    for param, code in results.items():
+        typer.echo(f"{param}: {code}")
+    if waf:
+        typer.echo("Possible WAF detected")
 
 @app.command()
 def report(format: str = typer.Option("md", help="Report format"), output: Path = typer.Option(Path("report.md"), help="Output file")):

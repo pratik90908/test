@@ -6,3 +6,7 @@ __pycache__/
 .mypy_cache/
 .coverage
 venv/
+
+# test artifacts
+test.db
+test.md

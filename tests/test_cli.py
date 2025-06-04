@@ -18,3 +18,11 @@ def test_report():
     result = runner.invoke(app, ["report", "--output", "test.md"])
     assert result.exit_code == 0
     assert "Report saved" in result.stdout
+
+
+def test_fuzz(tmp_path):
+    wordlist = tmp_path / "params.txt"
+    wordlist.write_text("id\nq\n")
+    result = runner.invoke(app, ["fuzz", "https://example.com", "--wordlist", str(wordlist)])
+    assert result.exit_code == 0
+    assert "Fuzzing" in result.stdout
