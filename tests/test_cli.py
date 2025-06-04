@@ -9,7 +9,16 @@ def test_init():
     assert result.exit_code == 0
     assert "Initialized Luna" in result.stdout
 
-def test_hunt():
+def test_hunt(monkeypatch):
+    monkeypatch.setattr("luna.recon.enum_subdomains", lambda d: [])
+    monkeypatch.setattr("luna.recon.port_scan", lambda t: [])
+
+    async def _async_noop(*args, **kwargs):
+        return []
+
+    monkeypatch.setattr("luna.recon.wayback_urls", _async_noop)
+    monkeypatch.setattr("luna.recon.passive_dns", _async_noop)
+    monkeypatch.setattr("luna.scanner.fetch_cves", _async_noop)
     result = runner.invoke(app, ["hunt", "example.com"])
     assert result.exit_code == 0
     assert "Starting hunt" in result.stdout

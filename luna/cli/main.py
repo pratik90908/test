@@ -37,6 +37,12 @@ def hunt(target: str, depth: int = 1, threads: int = 10):
     except RuntimeError as exc:
         typer.echo(f"Port scan failed: {exc}")
 
+    urls = asyncio.run(recon.wayback_urls(target))
+    typer.echo(f"{len(urls)} wayback URLs found")
+
+    pdns = asyncio.run(recon.passive_dns(target))
+    typer.echo(f"{len(pdns)} passive DNS domains found")
+
     results = asyncio.run(scanner.fetch_cves(target))
     typer.echo(f"Fetched {len(results)} CVEs for {target}")
 

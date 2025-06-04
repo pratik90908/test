@@ -1,8 +1,9 @@
 # Project Luna
 
 Luna is an offensive security automation framework. The current implementation
-includes a basic CLI with database initialization, recon wrappers, CVE lookup,
-simple reporting utilities, and a lightweight fuzzer.
+includes a Typer-based CLI with database initialization, recon wrappers,
+CVE lookup, simple reporting utilities, and a lightweight fuzzer. Recon now
+supports fetching Wayback Machine URLs and passive DNS records.
 
 ## Quickstart
 ```bash
