@@ -22,6 +22,8 @@ Wappalyzer = "^1.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0"
 ruff = "^0.4"
+pytest-asyncio = "^0.23"
+pytest-httpx = "^0.29"
 
 [tool.ruff]
 line-length = 88
