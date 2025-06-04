@@ -1,10 +1,13 @@
 # Project Luna
 
-Luna is an offensive security automation framework. This repo currently provides
-only a minimal CLI skeleton as a starting point for development.
+Luna is an offensive security automation framework. The current implementation
+includes a basic CLI with database initialization, recon wrappers, CVE lookup,
+and simple reporting utilities.
 
 ## Quickstart
 ```bash
-poetry install
-poetry run luna init
+pip install -e .
+luna init
+luna hunt example.com
+luna report --output report.md
 ```
