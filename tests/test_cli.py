@@ -35,3 +35,13 @@ def test_fuzz(tmp_path):
     result = runner.invoke(app, ["fuzz", "https://example.com", "--wordlist", str(wordlist)])
     assert result.exit_code == 0
     assert "Fuzzing" in result.stdout
+
+
+def test_exploits(monkeypatch):
+    async def _async_noop(*args, **kwargs):
+        return [{"id": "EXP"}]
+
+    monkeypatch.setattr("luna.exploits.fetch_exploits", _async_noop)
+    result = runner.invoke(app, ["show-exploits", "CVE-0000"])
+    assert result.exit_code == 0
+    assert "1 exploits found" in result.stdout

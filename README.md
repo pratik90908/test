@@ -11,5 +11,6 @@ pip install -e .
 luna init
 luna hunt example.com
 luna fuzz https://example.com --wordlist params.txt
+luna show-exploits CVE-2020-1234
 luna report --output report.md
 ```

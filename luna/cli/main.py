@@ -4,7 +4,7 @@ import typer
 
 from pathlib import Path
 
-from luna import recon, scanner, fuzzer
+from luna import recon, scanner, fuzzer, exploits
 from luna.db import init_db
 from luna.reporting import save_report
 
@@ -61,6 +61,15 @@ def fuzz(url: str, wordlist: Path = typer.Option(Path("params.txt"))):
         typer.echo(f"{param}: {code}")
     if waf:
         typer.echo("Possible WAF detected")
+
+
+@app.command()
+def show_exploits(cve: str):
+    """Fetch exploits for a given CVE."""
+    results = asyncio.run(exploits.fetch_exploits(cve))
+    typer.echo(f"{len(results)} exploits found for {cve}")
+    for item in results:
+        typer.echo(f"- {item.get('id')}")
 
 @app.command()
 def report(format: str = typer.Option("md", help="Report format"), output: Path = typer.Option(Path("report.md"), help="Output file")):
