@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "luna"
+version = "0.1.0"
+description = "Offensive security automation framework"
+authors = ["Luna Team <luna@example.com>"]
+readme = "README.md"
+packages = [{include = "luna"}]
+
+[tool.poetry.scripts]
+luna = "luna.__main__:app"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+typer = {extras = ["all"], version = "^0.12"}
+sqlmodel = "^0.0.16"
+httpx = "^0.28"
+aiofiles = "^23.2"
+anyio = "^4.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0"
+ruff = "^0.4"
+
+[tool.ruff]
+line-length = 88
+ignore = []
+
+[tool.pytest.ini_options]
+addopts = "-q"
+
+[build-system]
+requires = ["poetry-core>=1.7.0"]
+build-backend = "poetry.core.masonry.api"
